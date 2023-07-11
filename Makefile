@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/11 18:58:01 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/11 23:56:40 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRC_FILES =	00_pipex.c \
 			03_free_exit.c \
 
 OBJ_DIR = obj
-INC_DIR = includes
+INC_DIR = include
 LIBFT_DIR = ./libft
 INCS = -I$(INC_DIR) -I$(LIBFT_DIR)
 

@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:23:44 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/11 18:54:16 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/11 23:40:34 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_input	*init_input(int ac, char **av, char **ev)
 
 	input = (t_input *)malloc(sizeof(t_input));
 	if (input == NULL)
-		exit_error("malloc", errno, NULL, NULL);
+		error("malloc", errno, NULL, NULL);
 	input->ac = ac;
 	input->cmd_nbr = ac - 2;
 	input->pipefd[0] = -1;
@@ -36,17 +36,15 @@ static t_cmd	*init_cmd(t_input *input)
 
 	cmd = (t_cmd *)malloc(sizeof(t_cmd) * (input->cmd_nbr + 1));
 	if (cmd == NULL)
-		exit_error("malloc", errno, NULL, input);
+		error("malloc", errno, NULL, input);
 	i = 0;
 	while (i < input->cmd_nbr)
 	{
+		cmd[i].status = 0;
 		cmd[i].cmd = ft_split(input->av[i + 1], ' ');
 		if (cmd[i].cmd == NULL)
-			exit_error("malloc", errno, cmd, input);
-		cmd[i].path = check_cmd_path(&cmd[i].cmd[0], input, i); // manage the exit free on check_cmd_path
-		cmd[i].status = 0;
-		cmd[i].fd_in = -1;
-		cmd[i].fd_out = -1;
+			error("malloc", errno, cmd, input);
+		cmd[i].path = check_cmd_path(cmd, input, i);
 		i++;
 	}
 	cmd[input->cmd_nbr].cmd = NULL;
@@ -59,7 +57,7 @@ int	main(int ac, char **av, char **ev)
 	t_cmd	*cmd;
 
 	if (ac < 5)
-		exit(0); // manage the exit free FAILED ARGV
+		exit(0);
 	input = init_input((ac - 1), &av[1], ev);
 	cmd = init_cmd(input);
 	exec_cmd(cmd, input);
