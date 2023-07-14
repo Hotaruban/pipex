@@ -6,13 +6,11 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/14 19:11:27 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/14 19:53:07 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
-#include <sys/wait.h>
 
 static void	here_doc(char **av)
 {
@@ -133,8 +131,6 @@ int	main(int ac, char **av, char **ev)
 	}
 	else
 		cmd = get_cmd_path(ac - 3, &av[2], ev, -1);
-	if (access(av[ac -1], F_OK) == -1)
-		
 	exec_cmd(cmd, ac, av, ev);
 	if (access("here_doc", F_OK) == 0)
 		unlink("here_doc");
