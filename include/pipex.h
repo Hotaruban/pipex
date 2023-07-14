@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/10 12:45:46 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/11 23:57:38 by jhurpy           ###   ########.fr       */
+/*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
+/*   Updated: 2023/07/14 18:42:05 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,31 @@
 # include <sys/wait.h>
 # include <sys/errno.h>
 
-typedef struct s_input
-{
-	int		ac;
-	int		cmd_nbr;
-	int		pipefd[2];
-	int		tmpfd;
-	int		status;
-	char	**av;
-	char	**ev;
-	char	*infile;
-	char	*outfile;
-}		t_input;
-
 typedef struct s_cmd
 {
 	char	**cmd;
 	char	*path;
-	int		status;
-}		t_cmd;
+}				t_cmd;
 
-char	*check_cmd_path(t_cmd *cmd, t_input *input, int i);
-void	exec_cmd(t_cmd *cmd, t_input *input);
+typedef struct s_data
+{
+	char	**env;
+	char	*infile;
+	char	*outfile;
+	int		pipefd[2];
+	int		tmpfd;
+	int		i;
+}				t_data;
 
-void	error(char *str, int status, t_cmd *cmd, t_input *input);
-void	message_shell(t_cmd cmd);
+void	exec_cmd(t_cmd *cmd, int ac, char **av, char **ev);
+
+/*
+Function to free the memory allocated
+*/
+void	exit_error(char *msg, t_cmd *cmd, char **array);
+void	free_2d(char **array);
 void	free_struct(t_cmd *cmd);
-void	free_2d_array(char **array);
+void	argv_check(int ac, char **av);
+void	error_msg(char *str1, char *str2, char *str3, char *str4);
 
 #endif
