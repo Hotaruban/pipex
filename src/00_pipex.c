@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/14 19:53:07 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 04:47:23 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,7 @@ int	main(int ac, char **av, char **ev)
 	t_cmd	*cmd;
 
 	argv_check(ac, av);
-	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 8) == 0
-		&& ft_strlen(av[1]) == 8)
+	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
 		here_doc(av);
 		cmd = get_cmd_path(ac - 4, &av[3], ev, -1);

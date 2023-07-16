@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 00:33:46 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/14 20:44:37 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 04:44:47 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,23 @@ static t_data	*init_data(t_cmd *cmd, int ac, char **av, char **ev)
 
 static void	execute_cmd(t_cmd *cmd, t_data *data, int i)
 {
-	if (access(cmd[i].path, F_OK) == -1)
+	if (ft_strlen(cmd[i].cmd[0]) != 0 && cmd[i].cmd[0] != NULL
+		&& cmd[i].path == NULL)
 	{
 		free(data);
-		error_msg("no such file or directory: ", cmd[i].path, NULL, NULL);
+		error_msg("command not found: ", cmd[i].cmd[0], NULL, NULL);
 		exit_error(NULL, cmd, NULL);
 	}
 	if (ft_strlen(cmd[i].cmd[0]) == 0 && cmd[i].cmd[0] != NULL)
 	{
 		free(data);
-		error_msg("command not found: ", cmd[i].cmd[0], NULL, NULL);
+		error_msg("permission denied: ", cmd[i].cmd[0], NULL, NULL);
+		exit_error(NULL, cmd, NULL);
+	}
+	if (access(cmd[i].path, F_OK) == -1)
+	{
+		free(data);
+		error_msg("no such file or directory: ", cmd[i].path, NULL, NULL);
 		exit_error(NULL, cmd, NULL);
 	}
 	execve(cmd[i].path, cmd[i].cmd, data->env);
@@ -78,7 +85,6 @@ static void	dup_close(t_data *data)
 	close(data->pipefd[1]);
 }
 
-
 void	exec_cmd(t_cmd *cmd, int ac, char **av, char **ev)
 {
 	t_data	*data;
@@ -100,8 +106,8 @@ void	exec_cmd(t_cmd *cmd, int ac, char **av, char **ev)
 		else if (pid[i] > 0)
 			dup_close(data);
 	}
-	data->i = -1;
+	i = -1;
 	while (cmd[++i].cmd != NULL)
-		waitpid(pid[data->i], 0, WUNTRACED);
+		waitpid(pid[i], 0, WUNTRACED);
 	free(pid);
 }

@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:19:43 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/14 19:13:40 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 04:30:58 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,16 @@ void	exit_error(char *msg, t_cmd *cmd, char **array)
 
 void	argv_check(int ac, char **av)
 {
-	int	i;
-
-	i = 0;
 	if (ac < 5)
 		exit_error("Error: too few arguments\n", NULL, NULL);
-	if (ft_strncmp(av[1], "here_doc", 8) == 0 && ac < 6)
+	if (ft_strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
 		exit_error("Error: too few arguments\n", NULL, NULL);
-	if (access(av[1], R_OK) == -1 && ft_strncmp(av[1], "here_doc", 8) != 0)
-	{
+	if (access(av[1], F_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
+		error_msg("no such file or directory: ", av[1], NULL, NULL);
+	else if (access(av[1], R_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
 		error_msg("permission denied: ", av[1], NULL, NULL);
-		i++;
-	}
 	if (access(av[ac - 1], W_OK) == -1 && access(av[ac - 1], F_OK) == 0)
-	{
 		error_msg("permission denied: ", av[ac - 1], NULL, NULL);
-		i++;
-	}
-	if (i > 0)
-		exit(EXIT_FAILURE);
 }
 
 void	free_2d(char **array)
