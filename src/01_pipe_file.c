@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 00:33:46 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 21:42:25 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 00:46:36 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ void	pipex_file(char **env, t_data *data)
 	}
 	i = -1;
 	while (data->cmd[++i + 1] != NULL)
-		waitpid(pid[i], 0, WUNTRACED);
+		waitpid(pid[i], &data->signal, WUNTRACED);
 	free(pid);
 }

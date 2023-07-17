@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 19:39:11 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 02:54:38 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static t_data	*init_data(int ac, char **av)
 	data->infile = av[1];
 	data->outfile = av[ac - 1];
 	data->tmpfd = -1;
+	data->signal = 0;
 	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
 		data->cmd = av + 3;
@@ -64,16 +65,17 @@ static void	argv_check(int ac, char **av)
 	if (ft_strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
 		error("Error: too few arguments", NULL, 1);
 	if (access(av[1], F_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("no such file or directory: ", av[1], 0);
+		error("Error: no such file or directory: ", av[1], 0);
 	else if (access(av[1], R_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("permission denied: ", av[1], 0);
+		error("Error: permission denied: ", av[1], 1);
 	if (access(av[ac - 1], W_OK) == -1 && access(av[ac - 1], F_OK) == 0)
-		error("permission denied: ", av[ac - 1], 0);
+		error("Error: permission denied: ", av[ac - 1], 1);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	t_data	*data;
+	int		signal;
 
 	argv_check(ac, av);
 	data = init_data(ac, av);
@@ -82,6 +84,7 @@ int	main(int ac, char **av, char **env)
 	pipex_file(env, data);
 	if (access("here_doc", F_OK) == 0)
 		unlink("here_doc");
+	signal = data->signal;
 	free(data);
-	return (0);
+	return (WEXITSTATUS (signal));
 }

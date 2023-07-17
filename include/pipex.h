@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 19:39:21 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 00:18:57 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_data
 	int		tmpfd;
 	char	**cmd;
 	int		len;
+	int		signal;
 }				t_data;
 
 void	pipex_file(char **env, t_data *data);

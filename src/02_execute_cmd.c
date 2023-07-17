@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 05:12:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 19:40:34 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 01:04:11 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static char	*get_path(char *av, char **ev)
 		while (ft_strncmp(ev[i], "PATH=", 5) != 0)
 			i++;
 		path = get_env(av, ev[i]);
+		if (access(path, F_OK) == -1)
+			path = NULL;
 	}
 	return (path);
 }
@@ -68,24 +70,23 @@ void	execute_cmd(char *av, char **ev)
 	char	*path;
 	char	**cmd;
 
+	if (ft_strlen(av) == 0)
+		error("Error: command not found: ", av, 1);
 	cmd = ft_split(av, ' ');
 	if (cmd == NULL)
 		error("Error: malloc failed", NULL, 1);
 	path = get_path(cmd[0], ev);
-	if (ft_strlen(cmd[0]) != 0 && cmd[0] != NULL && path == NULL)
+	if (cmd[0][0] == '.')
+		error("Error: no such file or directory: ", cmd[0], 1);
+	else if (ft_strlen(cmd[0]) != 0 && cmd[0] != NULL && path == NULL)
 		error("Error: command not found: ", cmd[0], 1);
 	else if (ft_strlen(cmd[0]) == 0 && cmd[0] != NULL)
 		error("Error: permission denied: ", cmd[0], 1);
 	else if (access(path, F_OK) == -1)
 		error("Error: no such file or directory: ", path, 1);
-	else
-	{
-		if (execve(path, cmd, ev) == -1)
-		{
-			perror("Error: execve failed\n");
-			free(path);
-		}
-	}
+	else if (execve(path, cmd, ev) == -1)
+		perror("Error: execve failed\n");
+	free(path);
 	free_2d(cmd);
 	exit(EXIT_FAILURE);
 }
