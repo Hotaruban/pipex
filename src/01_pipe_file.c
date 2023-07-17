@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 00:33:46 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 19:40:10 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 21:42:25 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	open_file(t_data *data, int flag)
 {
-	int fd;
+	int	fd;
 
 	if (flag == 0)
 	{
@@ -64,7 +64,7 @@ void	pipex_file(char **env, t_data *data)
 	pid_t	*pid;
 	int		i;
 
-	pid = (pid_t *)malloc(sizeof(pid_t) * (data->len -  1));
+	pid = (pid_t *)malloc(sizeof(pid_t) * (data->len - 1));
 	if (!pid)
 		error("Error: malloc failed", NULL, 1);
 	i = 0;
