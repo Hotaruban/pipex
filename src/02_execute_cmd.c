@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 05:12:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 16:57:41 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 19:40:34 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,13 @@ void	execute_cmd(char *av, char **ev)
 		error("Error: permission denied: ", cmd[0], 1);
 	else if (access(path, F_OK) == -1)
 		error("Error: no such file or directory: ", path, 1);
-	else if (execve(path, cmd, ev) == -1)
+	else
 	{
-		perror("Error: execve failed\n");
-		free(path);
+		if (execve(path, cmd, ev) == -1)
+		{
+			perror("Error: execve failed\n");
+			free(path);
+		}
 	}
 	free_2d(cmd);
 	exit(EXIT_FAILURE);

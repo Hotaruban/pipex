@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:19:43 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 16:30:34 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 17:57:40 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void	error(char *str, char *cmd, int flag)
 {
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putendl_fd(cmd, STDERR_FILENO);
+	if (cmd)
+		free(cmd);
 	if (flag == 1)
 		exit(EXIT_FAILURE);
 }

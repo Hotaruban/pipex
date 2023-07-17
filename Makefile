@@ -6,13 +6,13 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/17 15:30:54 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/17 19:29:30 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler and flags
 CC = @gcc
-C_FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+C_FLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 #S_FLAGS = -g -fsanitize=address,undefined,leak
 
 # Commands

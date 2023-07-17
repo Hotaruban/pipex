@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/17 16:56:44 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/17 19:39:11 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,15 @@ static t_data	*init_data(int ac, char **av)
 	data->outfile = av[ac - 1];
 	data->tmpfd = -1;
 	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
+	{
 		data->cmd = av + 3;
+		data->len = ac - 3;
+	}
 	else
+	{
 		data->cmd = av + 2;
+		data->len = ac - 2;
+	}
 	return (data);
 }
 
