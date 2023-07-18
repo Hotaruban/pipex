@@ -6,11 +6,31 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 05:12:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/18 01:04:11 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 14:36:43 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+static void	free_2d(char **array)
+{
+	int	i;
+
+	i = -1;
+	while (array[++i] != NULL)
+		free(array[i]);
+	free(array);
+}
+
+void	error(char *str, char *cmd_str, char **cmd, int flag)
+{
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putendl_fd(cmd_str, STDERR_FILENO);
+	if (cmd)
+		free_2d(cmd);
+	if (flag == 1)
+		exit(EXIT_FAILURE);
+}
 
 static char	*get_env(char *cmd, char *ev)
 {
@@ -21,14 +41,14 @@ static char	*get_env(char *cmd, char *ev)
 
 	path_array = ft_split(ev, ':');
 	if (path_array == NULL)
-		error("Error: malloc failed", NULL, 1);
+		error("Error: malloc failed", NULL, NULL, 0);
 	i = -1;
 	while (path_array[++i] != NULL)
 	{
 		len = ft_strlen(path_array[i]) + ft_strlen(cmd) + 2;
 		path = (char *)malloc(sizeof(char) * len + 1);
 		if (path == NULL)
-			error("Error: malloc failed", NULL, 1);
+			error("Error: malloc failed", NULL, NULL, 0);
 		ft_strlcpy(path, path_array[i], len);
 		ft_strlcat(path, "/", len);
 		ft_strlcat(path, cmd, len);
@@ -51,7 +71,7 @@ static char	*get_path(char *av, char **ev)
 	{
 		path = ft_strdup(av);
 		if (path == NULL)
-			error("Error: malloc failed", NULL, 1);
+			error("Error: malloc failed", NULL, NULL, 1);
 	}
 	else
 	{
@@ -65,28 +85,31 @@ static char	*get_path(char *av, char **ev)
 	return (path);
 }
 
-void	execute_cmd(char *av, char **ev)
+void	execute_cmd(char *av, char **ev, t_data *data)
 {
 	char	*path;
 	char	**cmd;
 
-	if (ft_strlen(av) == 0)
-		error("Error: command not found: ", av, 1);
 	cmd = ft_split(av, ' ');
 	if (cmd == NULL)
-		error("Error: malloc failed", NULL, 1);
+		error("Error: malloc failed", NULL, NULL, 0);
+	if (cmd[0] == NULL)
+	{
+		free_struct(data);
+		error("Error: command not found: ", cmd[0], cmd, 1);
+	}
 	path = get_path(cmd[0], ev);
-	if (cmd[0][0] == '.')
-		error("Error: no such file or directory: ", cmd[0], 1);
-	else if (ft_strlen(cmd[0]) != 0 && cmd[0] != NULL && path == NULL)
-		error("Error: command not found: ", cmd[0], 1);
-	else if (ft_strlen(cmd[0]) == 0 && cmd[0] != NULL)
-		error("Error: permission denied: ", cmd[0], 1);
-	else if (access(path, F_OK) == -1)
-		error("Error: no such file or directory: ", path, 1);
+	if (path == NULL)
+	{
+		free_struct(data);
+		error("Error: command not found: ", cmd[0], cmd, 1);
+	}
+	if (cmd[0][0] == '.' || access(path, F_OK) == -1)
+	{
+		free_struct(data);
+		free(path);
+		error("Error: no such file or directory: ", cmd[0], cmd, 1);
+	}
 	else if (execve(path, cmd, ev) == -1)
 		perror("Error: execve failed\n");
-	free(path);
-	free_2d(cmd);
-	exit(EXIT_FAILURE);
 }

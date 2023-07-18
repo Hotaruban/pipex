@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/18 02:55:29 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/18 13:01:13 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ SRC_DIR = src
 SRC_FILES =	00_pipex.c \
 			01_pipe_file.c \
 			02_execute_cmd.c \
-			03_utils_pipex.c \
 
 OBJ_DIR = obj
 INC_DIR = include

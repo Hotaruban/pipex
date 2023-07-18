@@ -6,11 +6,18 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/18 02:54:38 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 14:59:54 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+
+void	free_struct(t_data *data)
+{
+	if (data->pid)
+		free(data->pid);
+	free(data);
+}
 
 static t_data	*init_data(int ac, char **av)
 {
@@ -18,11 +25,12 @@ static t_data	*init_data(int ac, char **av)
 
 	data = (t_data *)malloc(sizeof(t_data));
 	if (!data)
-		error("Error: malloc failed", NULL, 1);
+		error("Error: malloc failed", NULL, NULL, 1);
 	data->infile = av[1];
 	data->outfile = av[ac - 1];
 	data->tmpfd = -1;
 	data->signal = 0;
+	data->pid = NULL;
 	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
 	{
 		data->cmd = av + 3;
@@ -43,7 +51,7 @@ static void	here_doc(char **av)
 
 	fd = open(av[1], O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (fd == -1)
-		error("Error: creat failed", av[1], 0);
+		error("Error: creat failed", av[1], NULL, 0);
 	while (1)
 	{
 		write(STDOUT_FILENO, "heredoc> ", 9);
@@ -61,15 +69,15 @@ static void	here_doc(char **av)
 static void	argv_check(int ac, char **av)
 {
 	if (ac < 5)
-		error("Error: too few arguments", NULL, 1);
+		error("Error: too few arguments", NULL, NULL, 1);
 	if (ft_strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
-		error("Error: too few arguments", NULL, 1);
+		error("Error: too few arguments", NULL, NULL, 1);
 	if (access(av[1], F_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("Error: no such file or directory: ", av[1], 0);
+		error("Error: no such file or directory: ", av[1], NULL, 0);
 	else if (access(av[1], R_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("Error: permission denied: ", av[1], 1);
+		error("Error: permission denied: ", av[1], NULL, 1);
 	if (access(av[ac - 1], W_OK) == -1 && access(av[ac - 1], F_OK) == 0)
-		error("Error: permission denied: ", av[ac - 1], 1);
+		error("Error: permission denied: ", av[ac - 1], NULL, 1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -85,6 +93,6 @@ int	main(int ac, char **av, char **env)
 	if (access("here_doc", F_OK) == 0)
 		unlink("here_doc");
 	signal = data->signal;
-	free(data);
+	free_struct(data);
 	return (WEXITSTATUS (signal));
 }

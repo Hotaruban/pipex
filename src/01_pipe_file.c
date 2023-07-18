@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 00:33:46 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/18 00:46:36 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/18 15:00:29 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	open_file(t_data *data, int flag)
 	{
 		fd = open(data->infile, O_RDONLY);
 		dup2(fd, STDIN_FILENO);
-		close(fd);
 	}
 	else
 	{
@@ -29,8 +28,8 @@ static void	open_file(t_data *data, int flag)
 		else
 			fd = open(data->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(fd, STDOUT_FILENO);
-		close(fd);
 	}
+	close(fd);
 }
 
 static void	child_process(t_data *data, char **env, int i)
@@ -49,7 +48,12 @@ static void	child_process(t_data *data, char **env, int i)
 	}
 	if (i > 0)
 		close(data->tmpfd);
-	execute_cmd(data->cmd[i], env);
+	if (data->cmd[i] == NULL || ft_strlen(data->cmd[i]) == 0)
+	{
+		free_struct(data);
+		error("Error: command not found", NULL, NULL, 0);
+	}
+	execute_cmd(data->cmd[i], env, data);
 }
 
 static void	parent_process(t_data *data)
@@ -61,28 +65,26 @@ static void	parent_process(t_data *data)
 
 void	pipex_file(char **env, t_data *data)
 {
-	pid_t	*pid;
 	int		i;
 
-	pid = (pid_t *)malloc(sizeof(pid_t) * (data->len - 1));
-	if (!pid)
-		error("Error: malloc failed", NULL, 1);
+	data->pid = (pid_t *)malloc(sizeof(pid_t) * (data->len - 1));
+	if (!data->pid)
+		error("Error: malloc failed", NULL, NULL, 1);
 	i = 0;
 	while (data->cmd[i + 1] != NULL)
 	{
 		if (data->cmd[i + 2] != NULL)
 			pipe(data->pipefd);
-		pid[i] = fork();
-		if (pid[i] == -1)
-			error("Error: fork failed", NULL, 0);
-		else if (pid[i] == 0)
+		data->pid[i] = fork();
+		if (data->pid[i] == -1)
+			error("Error: fork failed", NULL, NULL, 0);
+		else if (data->pid[i] == 0)
 			child_process(data, env, i);
-		else if (pid[i] > 0)
+		else if (data->pid[i] > 0)
 			parent_process(data);
 		i++;
 	}
 	i = -1;
 	while (data->cmd[++i + 1] != NULL)
-		waitpid(pid[i], &data->signal, WUNTRACED);
-	free(pid);
+		waitpid(data->pid[i], &data->signal, WUNTRACED);
 }
