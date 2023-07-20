@@ -5,94 +5,119 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/13 19:16:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/18 14:59:54 by jhurpy           ###   ########.fr       */
+/*   Created: 2023/07/19 01:03:38 by jhurpy            #+#    #+#             */
+/*   Updated: 2023/07/20 20:05:53 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-void	free_struct(t_data *data)
+void	exit_error(char *str)
 {
-	if (data->pid)
-		free(data->pid);
-	free(data);
+	write(STDERR_FILENO, str, ft_strlen(str));
+	//perror(void);
+	if (access("here_doc", F_OK) == 0)
+		unlink("here_doc");
+	exit(EXIT_FAILURE);
 }
 
-static t_data	*init_data(int ac, char **av)
-{
-	t_data	*data;
-
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
-		error("Error: malloc failed", NULL, NULL, 1);
-	data->infile = av[1];
-	data->outfile = av[ac - 1];
-	data->tmpfd = -1;
-	data->signal = 0;
-	data->pid = NULL;
-	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
-	{
-		data->cmd = av + 3;
-		data->len = ac - 3;
-	}
-	else
-	{
-		data->cmd = av + 2;
-		data->len = ac - 2;
-	}
-	return (data);
-}
-
-static void	here_doc(char **av)
+static int	here_doc(char *infile)
 {
 	char	*line;
 	int		fd;
 
-	fd = open(av[1], O_CREAT | O_RDWR | O_TRUNC, 0666);
+	fd = open(infile, O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (fd == -1)
-		error("Error: creat failed", av[1], NULL, 0);
+		exit_error("Error: creat failed");
 	while (1)
 	{
 		write(STDOUT_FILENO, "heredoc> ", 9);
 		line = get_next_line(STDIN_FILENO);
-		if (ft_strncmp(line, av[2], ft_strlen(av[2])) == 0
-			&& ((ft_strlen(line) - 1) == ft_strlen(av[2])))
+		if (ft_strncmp(line, infile, ft_strlen(infile)) == 0
+			&& ((ft_strlen(line) - 1) == ft_strlen(infile)))
 			break ;
 		write(fd, line, ft_strlen(line));
 		free(line);
 	}
 	free(line);
-	close(fd);
+	return (fd);
 }
 
-static void	argv_check(int ac, char **av)
+static int	fork_process(char *av, char **ev)
 {
-	if (ac < 5)
-		error("Error: too few arguments", NULL, NULL, 1);
-	if (ft_strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
-		error("Error: too few arguments", NULL, NULL, 1);
-	if (access(av[1], F_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("Error: no such file or directory: ", av[1], NULL, 0);
-	else if (access(av[1], R_OK) == -1 && ft_strncmp(av[1], "here_doc", 9) != 0)
-		error("Error: permission denied: ", av[1], NULL, 1);
-	if (access(av[ac - 1], W_OK) == -1 && access(av[ac - 1], F_OK) == 0)
-		error("Error: permission denied: ", av[ac - 1], NULL, 1);
+	int	fd[2];
+	int	pid;
+
+	if (pipe(fd) == -1)
+		exit_error("Error: pipe failed");
+	pid = fork();
+	if (pid == -1)
+		exit_error("Error: fork failed");
+	else if (pid == 0)
+	{
+		close(fd[0]);
+		if (dup2(fd[1], STDOUT_FILENO) == -1)
+			exit_error("Error: dup2 failed");
+		execute_cmd(av, ev);
+	}
+	else if (pid > 0)
+	{
+		close(fd[1]);
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+			exit_error("Error: dup2 failed");
+		waitpid(pid, 0, WUNTRACED);
+	}
+	return (0);
 }
 
-int	main(int ac, char **av, char **env)
+static int	open_fd(char *infile, char *outfile)
 {
-	t_data	*data;
-	int		signal;
+	int	fd_in;
+	int	fd_out;
 
-	argv_check(ac, av);
-	data = init_data(ac, av);
-	if (ac >= 6 && ft_strncmp(av[1], "here_doc", 9) == 0)
-		here_doc(av);
-	pipex_file(env, data);
+	if (ft_strncmp(infile, "here_doc", 9) == 0)
+	{
+		fd_in = here_doc(infile);
+		fd_out = open(outfile, O_CREAT | O_RDWR | O_APPEND, 0666);
+	}
+	else
+	{
+		fd_in = open(infile, O_RDONLY);
+		fd_out = open(outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
+	}
+	if (fd_in == -1 || fd_out == -1)
+		exit_error("Error: open failed");
+	if (dup2(fd_in, STDIN_FILENO) == -1)
+	{
+		close(fd_in);
+		if (fd_out != -1)
+			close(fd_out);
+		exit_error("Error: dup2 failed");
+	}
+	close(fd_in);
+	return (fd_out);
+}
+
+int	main(int ac, char **av, char **ev)
+{
+	int	i;
+	int	fd_out;
+	int	signal;
+
+	if (ac < 5 || (ac < 6 && ft_strncmp(av[1], "here_doc", 9) == 0))
+		exit_error("Error: too few arguments");
+	else
+		fd_out = open_fd(av[1], av[ac - 1]);
+	if (ac >=6 && ft_strncmp(av[1], "here_doc", 9) == 0)
+		i = 3;
+	else
+		i = 2;
+	while (i < ac - 2)
+		signal = fork_process(av[i++], ev);
+	if (dup2(fd_out, STDOUT_FILENO) == -1)
+		exit_error("Error: dup2 failed");
 	if (access("here_doc", F_OK) == 0)
 		unlink("here_doc");
-	signal = data->signal;
-	free_struct(data);
+	execute_cmd(av[i], ev);
 	return (WEXITSTATUS (signal));
 }

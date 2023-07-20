@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/18 14:39:19 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/20 19:56:30 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,10 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
+# include <sys/types.h>
 
-typedef struct s_data
-{
-	char	*infile;
-	char	*outfile;
-	int		pipefd[2];
-	int		tmpfd;
-	char	**cmd;
-	int		len;
-	int		signal;
-	pid_t	*pid;
-}				t_data;
-
-void	pipex_file(char **env, t_data *data);
-void	execute_cmd(char *av, char **ev, t_data *data);
-void	free_struct(t_data *data);
-void	error(char *str, char *cmd_str, char **cmd, int flag);
+int	main(int ac, char **av, char **ev);
+void	execute_cmd(char *av, char **ev);
+void	exit_error(char *str);
 
 #endif
