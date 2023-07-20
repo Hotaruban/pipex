@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 02:06:47 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/20 21:38:50 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/21 00:09:09 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ static char	*check_path_array(char *av, char **path_array)
 		if (tmp_path != NULL)
 			free(tmp_path);
 		if (access(path, F_OK) == 0)
-		{
-			while (*path_array)
-				free(*path_array++);
 			return (path);
-		}
 		if (path != NULL)
 			free(path);
 	}
@@ -56,7 +52,7 @@ static char	*get_path(char *av, char **ev)
 	{
 		path = ft_strdup(av);
 		if (path == NULL)
-			exit_error("Error: malloc failed\n");
+			exit_error("Error: malloc failed ");
 	}
 	else
 	{
@@ -64,7 +60,7 @@ static char	*get_path(char *av, char **ev)
 			ev++;
 		path_array = ft_split(*ev, ':');
 		if (path_array == NULL)
-			exit_error("Error: malloc failed\n");
+			exit_error("Error: malloc failed ");
 		path = check_path_array(av, path_array);
 		free(path_array);
 	}
@@ -77,10 +73,10 @@ void	execute_cmd(char *av, char **ev)
 	char	**cmd;
 
 	if (av == NULL || ft_strlen(av) == 0)
-		exit_error("Error: command not found\n");
+		exit_error("Error: command not found ");
 	cmd = ft_split(av, ' ');
 	if (cmd == NULL)
-		exit_error("Error: malloc failed\n");
+		exit_error("Error: malloc failed ");
 	if (cmd[0] == NULL)
 		error("Error: command not found: ", cmd[0], cmd);
 	path = get_path(cmd[0], ev);
