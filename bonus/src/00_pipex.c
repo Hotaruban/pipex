@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 01:03:38 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/21 00:02:38 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/21 15:52:44 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ int	main(int ac, char **av, char **ev)
 		exit_error("Error: dup2 failed ");
 	if (access("here_doc", F_OK) == 0)
 		unlink("here_doc");
+	close(fd_out);
 	execute_cmd(av[i], ev);
 	return (WEXITSTATUS (signal));
 }
