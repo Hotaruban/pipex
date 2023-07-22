@@ -6,12 +6,12 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/22 23:03:49 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 00:13:07 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "../libft/includes/libft.h"
 # include <stdio.h>

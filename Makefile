@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/22 23:50:13 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/23 00:12:41 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -113,6 +113,8 @@ re: fclean all bonus
 norm:
 	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR)/*.c ;
 	@norminette -R CheckDefine $(INC_DIR)/*.h ;
+	@norminette -R CheckForbiddenSourceHeader $(SRC_DIR_BONUS)/*.c ;
+	@norminette -R CheckDefine $(INC_DIR_BONUS)/*.h ;
 	@norminette -R CheckForbiddenSourceHeader $(LIBFT_DIR)/src/*.c ;
 	@norminette -R CheckDefine $(LIBFT_DIR)/includes/*.h
 
