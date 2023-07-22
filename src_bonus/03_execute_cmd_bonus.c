@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 21:46:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/23 00:09:19 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 00:28:23 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	execute_cmd(char *av, char **ev)
 	if (cmd == NULL)
 		exit_error("malloc\n");
 	if (cmd[0] == NULL)
-		exit_error(cmd[0]);
+		free_exit_error(cmd[0], cmd, NULL);
 	path = get_path(cmd[0], ev);
 	if (path == NULL)
 		free_exit_error(NULL, cmd, NULL);

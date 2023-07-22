@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 21:46:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/22 22:33:28 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 00:51:02 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 static void	free_exit_error(char *str, char **cmd, char *path)
 {
 	perror(str);
-	while (*cmd)
-		free(*cmd++);
-	free(cmd);
+	if (cmd[1] != NULL)
+	{
+		while (*cmd != NULL)
+			free(*cmd++);
+	}
+	else
+		free(cmd);
 	if (path != NULL)
 		free(path);
 	exit(EXIT_FAILURE);
