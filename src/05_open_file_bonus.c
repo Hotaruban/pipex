@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:10:52 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/22 23:02:47 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/22 22:28:26 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,28 @@ static void	exit_error(char *str)
 {
 	perror(str);
 	exit(EXIT_FAILURE);
+}
+
+void	here_doc(char *infile, char *limiter)
+{
+	char	*line;
+	int		fd;
+
+	fd = open(infile, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
+		exit_error(infile);
+	while (1)
+	{
+		write(STDOUT_FILENO, "heredoc> ", 9);
+		line = get_next_line(STDIN_FILENO);
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+			&& ((ft_strlen(line) - 1) == ft_strlen(limiter)))
+			break ;
+		write(fd, line, ft_strlen(line));
+		free(line);
+	}
+	free(line);
+	close(fd);
 }
 
 void	infile_open(char *infile)
