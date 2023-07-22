@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 21:46:26 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/23 00:51:02 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 01:51:38 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ void	execute_cmd(char *av, char **ev)
 		free_exit_error(NULL, cmd, NULL);
 	if (access(path, F_OK) == -1)
 		free_exit_error(path, cmd, path);
-	else if (execve(path, cmd, ev) == -1)
-		free_exit_error("execve\n", cmd, path);
+	if (execve(path, cmd, ev) == -1)
+		free_exit_error("execve", cmd, path);
 }

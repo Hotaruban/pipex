@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 21:35:07 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/23 00:50:26 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 03:30:23 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	exit_error(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	fork_process(char *av, char **ev)
+int	fork_process(char *av, char **ev)
 {
 	int	fd[2];
 	int	pid;
@@ -42,6 +42,6 @@ void	fork_process(char *av, char **ev)
 			exit_error("dup2\n");
 		if (close(fd[0]) == -1 || close(fd[1]) == -1)
 			exit_error("close\n");
-		waitpid(pid, 0, WUNTRACED);
 	}
+	return (pid);
 }

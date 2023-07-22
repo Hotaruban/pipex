@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/23 00:16:06 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 03:31:49 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 void	here_doc(char *infile, char *limiter);
 void	infile_open(char *infile);
 void	outfile_open(char *outfile, int flag);
-void	fork_process(char *av, char **ev);
+int		fork_process(char *av, char **ev);
 void	execute_cmd(char *av, char **ev);
 
 #endif
