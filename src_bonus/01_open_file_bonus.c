@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 18:10:52 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/22 23:44:33 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/23 00:15:53 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,14 @@ void	infile_open(char *infile)
 	}
 }
 
-void	outfile_open(char *outfile)
+void	outfile_open(char *outfile, int flag)
 {
 	int	fd_out;
 
-	fd_out = open(outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (flag == 1)
+		fd_out = open(outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	else
+		fd_out = open(outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd_out == -1)
 		exit_error(outfile);
 	if (dup2(fd_out, STDOUT_FILENO) == -1)
