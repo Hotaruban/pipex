@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/22 22:04:02 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/22 23:43:36 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,8 @@ C_FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 # Commands
 RM = @rm -rf
 AR = ar rc
+
+# ---------------------------------------------------------------------------- #
 
 # Target library name and directories
 NAME = pipex
@@ -37,6 +39,8 @@ INCS = -I$(INC_DIR) -I$(LIBFT_DIR)
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(SOURCES:$(SRC_DIR)%.c=$(OBJ_DIR)/%.o)
 
+# ---------------------------------------------------------------------------- #
+
 # Default target, build the library
 all: $(LIBFT_DIR) $(NAME)
 
@@ -53,6 +57,42 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(NAME): $(OBJECTS) $(LIBFT)
 	$(CC) $(C_FLAGS) $^ $(INCS) -o $(NAME)
 
+# ---------------------------------------------------------------------------- #
+
+# Target library name and directories BONUS
+NAME_BONUS = pipex_bonus
+LIBFT = ./libft/libft.a
+SRC_DIR_BONUS = src_bonus
+SRC_FILES_BONUS =	00_pipex_bonus.c \
+					01_open_file_bonus.c \
+					02_fork_process_bonus.c \
+					03_execute_cmd_bonus.c
+
+OBJ_DIR_BONUS = obj_bonus
+INC_DIR_BONUS = include_bonus
+LIBFT_DIR = ./libft
+INCS_BONUS = -I$(INC_DIR_BONUS) -I$(LIBFT_DIR)
+
+# Sources, objects and dependencies
+SOURCES_BONUS = $(addprefix $(SRC_DIR_BONUS)/, $(SRC_FILES_BONUS))
+OBJECTS_BONUS = $(SOURCES_BONUS:$(SRC_DIR_BONUS)%.c=$(OBJ_DIR_BONUS)/%.o)
+
+# ---------------------------------------------------------------------------- #
+
+# Default target, build the library
+bonus: $(LIBFT_DIR) $(NAME_BONUS)
+
+# Object file build rule
+$(OBJ_DIR_BONUS)/%.o: $(SRC_DIR_BONUS)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(C_FLAGS) -c $< -o $@
+
+# Target library build rule
+$(NAME_BONUS): $(OBJECTS_BONUS) $(LIBFT)
+	$(CC) $(C_FLAGS) $^ $(INCS_BONUS) -o $(NAME_BONUS)
+
+# ---------------------------------------------------------------------------- #
+
 # Clean object files
 clean:
 	$(RM) $(OBJ_DIR)
@@ -61,11 +101,12 @@ clean:
 # Clean object files and target library
 fclean: clean
 	$(RM) $(NAME)
+	$(RM) $(NAME_BONUS)
 	$(RM) $(LIBFT_DIR)/libft.a
 	@make fclean -C $(LIBFT_DIR)
 
 # Clean and rebuild the target library
-re: fclean all
+re: fclean all bonus
 
 # Check code style
 norm:

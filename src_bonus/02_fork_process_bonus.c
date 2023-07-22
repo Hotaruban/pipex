@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   02_fork_process.c                                  :+:      :+:    :+:   */
+/*   02_fork_process_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 21:35:07 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/22 22:18:33 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/22 23:44:36 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include_bonus/pipex_bonus.h"
 
 static void	exit_error(char *str)
 {
