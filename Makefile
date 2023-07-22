@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/22 23:43:36 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/22 23:50:13 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,6 +96,7 @@ $(NAME_BONUS): $(OBJECTS_BONUS) $(LIBFT)
 # Clean object files
 clean:
 	$(RM) $(OBJ_DIR)
+	$(RM) $(OBJ_DIR_BONUS)
 	@make clean -C $(LIBFT_DIR)
 
 # Clean object files and target library
