@@ -6,7 +6,7 @@
 #    By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/22 02:03:42 by jhurpy            #+#    #+#              #
-#    Updated: 2023/07/20 19:56:48 by jhurpy           ###   ########.fr        #
+#    Updated: 2023/07/22 22:04:02 by jhurpy           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ NAME = pipex
 LIBFT = ./libft/libft.a
 SRC_DIR = src
 SRC_FILES =	00_pipex.c \
-			01_execute_cmd.c \
+			01_open_file.c \
+			02_fork_process.c \
+			03_execute_cmd.c
 
 OBJ_DIR = obj
 INC_DIR = include

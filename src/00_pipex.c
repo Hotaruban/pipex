@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   00_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/04 22:25:13 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/06/06 23:57:19 by jhurpy           ###   ########.fr       */
+/*   Created: 2023/07/22 17:36:44 by jhurpy            #+#    #+#             */
+/*   Updated: 2023/07/22 22:19:13 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-The function ft_lstdelone pass the node content pointed by lst
-in function pointed by del,
-and free the memory of this node.
-*/
+#include "../include/pipex.h"
 
-#include "../includes/libft.h"
-
-void	ft_lstdelone(t_list *lst, void (*del)(void*))
+int	main(int ac, char **av, char **ev)
 {
-	if (lst == NULL || del == NULL)
-		return ;
-	if (lst != NULL)
+	if (ac != 5)
 	{
-		del(lst->content);
-		free(lst);
+		perror("Wrong number of arguments\n");
+		exit(EXIT_FAILURE);
 	}
+	infile_open(av[1]);
+	fork_process(av[2], ev);
+	outfile_open(av[4]);
+	execute_cmd(av[3], ev);
+	return (0);
 }

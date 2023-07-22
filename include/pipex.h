@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 22:15:20 by jeremy            #+#    #+#             */
-/*   Updated: 2023/05/07 16:14:35 by jhurpy           ###   ########.fr       */
+/*   Created: 2023/07/12 14:12:34 by jhurpy            #+#    #+#             */
+/*   Updated: 2023/07/22 22:17:56 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-The function ft_putnbr_fd use copy a integer in the file descriptor fd.
-The integer must to be change in characters.
-*/
+#ifndef PIPEX_H
+# define PIPEX_H
 
-#include <unistd.h>
-#include "../includes/libft.h"
+# include "../libft/includes/libft.h"
+# include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <sys/errno.h>
+# include <sys/types.h>
 
-void	ft_putnbr_fd(int n, int fd)
-{
-	char	c;
-	int		sign;
+void	infile_open(char *infile);
+void	outfile_open(char *outfile);
+void	fork_process(char *av, char **ev);
+void	execute_cmd(char *av, char **ev);
 
-	sign = 1;
-	if (n < 0)
-	{
-		ft_putchar_fd('-', fd);
-		sign = -1;
-	}
-	if (n / 10)
-		ft_putnbr_fd(n / 10 * sign, fd);
-	c = (n % 10 * sign) + 48;
-	ft_putchar_fd(c, fd);
-}
+#endif
