@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:04:24 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 22:56:11 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/24 23:53:59 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	child_process(int pipefd[2], char **av, char **ev, int index)
 	else
 	{
 		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-			exit_error("Error: dup2 failed");
+			exit_error("pipex: ", "dup2 failed ");
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);

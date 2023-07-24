@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 18:13:40 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 18:14:21 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/24 23:56:08 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	creat_here_doc(char *infile, char *limiter)
 
 	fd = open(infile, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
-		exit_error(infile);
+		exit_error("pipex: ", infile);
 	while (1)
 	{
 		write(STDOUT_FILENO, "heredoc> ", 9);

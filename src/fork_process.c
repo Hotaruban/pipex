@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 21:54:22 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 22:49:25 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/24 23:41:42 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ pid_t	*fork_process(int ac, char **av, char **ev, int index)
 
 	pid = (pid_t *)malloc(sizeof(pid_t) * (ac - index - 1));
 	if (!pid)
-		exit_error("Error: malloc failed");
+		exit_error("pipex: malloc failed", NULL);
 	i = 0;
 	while (index + i < ac - 1)
 	{
 		pipe_process(av[1], pipefd, i);
 		pid[i] = fork();
 		if (pid[i] == -1)
-			exit_error("Error: fork failed");
+			exit_error("pipex: fork failed", NULL);
 		else if (pid[i] == 0)
 			child_process(pipefd, av, ev, i + index);
 		else if (pid[i] > 0)
