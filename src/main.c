@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 18:08:50 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 22:38:32 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 02:35:36 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	main(int ac, char **av, char **ev)
 		waitpid(pid[i++], &status, WUNTRACED);
 	if (ft_strncmp("here_doc", av[1], 9) == 0)
 		unlink("here_doc");
+	free(pid);
 	return (WEXITSTATUS(status));
 }

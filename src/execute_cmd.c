@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 19:44:00 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/25 02:31:51 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 04:08:11 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,27 @@ static char	*check_path(char *av, char **ev)
 	char	**path_array;
 	char	*tmp_path;
 	char	*path;
+	int		i;
 
 	path_array = get_env(ev);
-	while (*path_array++ != NULL)
+	i = -1;
+	while (path_array[++i] != NULL)
 	{
-		tmp_path = ft_strjoin(*path_array, "/");
+		tmp_path = ft_strjoin(path_array[i], "/");
 		path = ft_strjoin(tmp_path, av);
 		if (tmp_path != NULL)
 			free(tmp_path);
 		if (access(path, F_OK) == 0)
-			return (path);
+			break ;
 		if (path != NULL)
 			free(path);
+		path = NULL;
 	}
-	return (NULL);
+	i = -1;
+	while (path_array[++i] != NULL)
+		free(path_array[i]);
+	free(path_array);
+	return (path);
 }
 
 static char	*get_path(char **cmd, char **ev)
@@ -78,7 +85,7 @@ static char	*get_path(char **cmd, char **ev)
 		path = check_path(cmd[0], ev);
 	if (path == NULL)
 	{
-		ft_putstr_fd("pipex: command not found:", 2);
+		ft_putstr_fd("pipex: command not found: ", 2);
 		ft_putendl_fd(cmd[0], 2);
 		while (*cmd != NULL)
 			free(*cmd++);
