@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   02_fork_process_bonus.c                            :+:      :+:    :+:   */
+/*   check_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/22 21:35:07 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/23 04:11:25 by jhurpy           ###   ########.fr       */
+/*   Created: 2023/07/24 18:10:30 by jhurpy            #+#    #+#             */
+/*   Updated: 2023/07/24 22:46:47 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include_bonus/pipex_bonus.h"
+#include "../include/pipex.h"
 
-static void	exit_error(char *str)
+int	check_args(int ac, char **av)
 {
-	perror(str);
-	exit(EXIT_FAILURE);
-}
+	int	index;
 
-int	fork_process(char *av, char **ev)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == -1)
-		exit_error("fork\n");
-	else if (pid == 0)
-		execute_cmd(av, ev);
-	return (pid);
+	if (ac < 5 || (ac < 6 && ft_strncmp("here_doc", av[1], 9) == 0))
+	{
+		perror("Error: wrong number of arguments");
+		exit(EXIT_FAILURE);
+	}
+	index = 2;
+	if (!ft_strncmp("here_doc", av[1], 9))
+	{
+		creat_here_doc(av[1], av[2]);
+		index++;
+	}
+	return (index);
 }
