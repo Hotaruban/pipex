@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:08:48 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/25 00:52:36 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 02:32:08 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	open_infile(char *infile)
 	if (fd_in == -1)
 		perror("pipex");
 	if ((access(infile, R_OK) == -1 && access(infile, F_OK) == 0)
-			|| access(infile, F_OK) == -1 || fd_in == -1)
+		|| access(infile, F_OK) == -1 || fd_in == -1)
 	{
 		if (pipe(tmpfd) == -1)
 			exit_error("pipex: ", "pipe failed ");

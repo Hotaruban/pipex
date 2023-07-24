@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 19:44:00 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/25 02:07:24 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 02:31:51 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static char	**get_env(char **ev)
 		if (array == NULL)
 			exit_error("pipex", "malloc failed ");
 	}
-	ft_putendl_fd(*array, 2);
 	return (array);
 }
 
@@ -79,16 +78,16 @@ static char	*get_path(char **cmd, char **ev)
 		path = check_path(cmd[0], ev);
 	if (path == NULL)
 	{
-		ft_putendl_fd(path, 2);
-		exit_error("pipex: command not found: ", cmd[0]);
-		//while (*cmd != NULL)
-		//	free(*cmd++);
-		//free(cmd);
+		ft_putstr_fd("pipex: command not found:", 2);
+		ft_putendl_fd(cmd[0], 2);
+		while (*cmd != NULL)
+			free(*cmd++);
+		exit(127);
 	}
 	if (access(path, F_OK) == -1)
 	{
-		//while (*cmd != NULL)
-		//	free(*cmd++);
+		while (*cmd != NULL)
+			free(*cmd++);
 		free(cmd);
 		exit_error("pipex: no such file or directory: ", path);
 	}
@@ -104,8 +103,8 @@ void	execute_cmd(char *av, char **ev)
 	path = get_path(cmd, ev);
 	if (execve(path, cmd, ev) == -1)
 	{
-		//while (*cmd != NULL)
-		//	free(*cmd++);
+		while (*cmd != NULL)
+			free(*cmd++);
 		free(cmd);
 		free(path);
 		exit_error("pipex: ", "execve failed ");
