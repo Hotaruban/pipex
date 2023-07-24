@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 20:04:24 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 23:53:59 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 01:13:48 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	child_process(int pipefd[2], char **av, char **ev, int index)
 {
 	if (av[index + 3] == NULL && ft_strncmp("here_doc", av[1], 9) == 0)
-		open_outfile(av[index + 1], 1);
-	else if (av[index + 2] == NULL)
+		open_outfile(av[index + 2], 1);
+	else if (av[index + 2] == NULL && ft_strncmp("here_doc", av[1], 9) != 0)
 		open_outfile(av[index + 1], 2);
 	else
 	{
