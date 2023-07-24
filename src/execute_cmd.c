@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 19:44:00 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 23:59:50 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 02:07:24 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	**get_cmd(char *av)
 	char	**cmd;
 
 	if (av == NULL || ft_strlen(av) == 0)
-		exit_error("pipex", av);
+		exit_error("pipex: ", "command not found");
 	cmd = ft_split(av, ' ');
 	if (cmd == NULL)
 		exit_error("pipex", "malloc failed ");
@@ -30,11 +30,18 @@ static char	**get_env(char **ev)
 {
 	char	**array;
 
-	while (ft_strncmp(*ev, "PATH=", 5) != 0)
+	array = NULL;
+	while (*ev != NULL && ft_strncmp(*ev, "PATH=", 5) != 0)
 		ev++;
-	array = ft_split(*ev + 5, ':');
-	if (array == NULL)
-		exit_error("pipex", "malloc failed ");
+	if (*ev == NULL)
+		exit_error("pipex: ", "No such file or directory");
+	if (ft_strncmp(*ev, "PATH=", 5) == 0)
+	{
+		array = ft_split(*ev + 5, ':');
+		if (array == NULL)
+			exit_error("pipex", "malloc failed ");
+	}
+	ft_putendl_fd(*array, 2);
 	return (array);
 }
 
@@ -63,18 +70,20 @@ static char	*get_path(char **cmd, char **ev)
 {
 	char	*path;
 
+	path = NULL;
 	if (cmd[0][0] == '/')
 	{
 		path = ft_strdup(cmd[0]);
 	}
 	else
 		path = check_path(cmd[0], ev);
-		if (path == NULL)
+	if (path == NULL)
 	{
+		ft_putendl_fd(path, 2);
+		exit_error("pipex: command not found: ", cmd[0]);
 		//while (*cmd != NULL)
 		//	free(*cmd++);
 		//free(cmd);
-		exit_error("pipex: command not found: ", cmd[0]);
 	}
 	if (access(path, F_OK) == -1)
 	{
