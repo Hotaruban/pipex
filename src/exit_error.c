@@ -6,7 +6,7 @@
 /*   By: jhurpy <jhurpy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 19:15:04 by jhurpy            #+#    #+#             */
-/*   Updated: 2023/07/24 23:48:05 by jhurpy           ###   ########.fr       */
+/*   Updated: 2023/07/25 11:32:53 by jhurpy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,7 @@ void	exit_error(char *str1, char *str2)
 {
 	ft_putstr_fd(str1, STDERR_FILENO);
 	ft_putendl_fd(str2, STDERR_FILENO);
+	if (access("here_doc", F_OK) == 0)
+		unlink("here_doc");
 	exit(EXIT_FAILURE);
 }
